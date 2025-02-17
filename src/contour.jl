@@ -7,8 +7,7 @@ contours that we plan to support:
 """
 abstract type AbstractContour end
 
-"""
-"""
+
 struct ellipse <: AbstractContour
     center::Vector{Float64} 
     semi_x::Float64
@@ -78,4 +77,43 @@ function get_quadpts(contour::circle, num_quadpts::Int64)
     end
 
     return quadpts(num_quadpts, nodes, nodes_prime)
+end
+
+"""
+    show_contour!(ctr::ellipse)
+    show_contour!(ctr::circle)
+
+Plot the contour `ctr` on Axis `ax`
+"""
+
+function show_contour!(ax, ctr::ellipse)
+    θ = range(0, 2π; length=100)
+    x₁ = ctr.center[1] .+ ctr.semi_x*cos.(θ)
+    x₂ = ctr.center[2] .+ ctr.semi_y*sin.(θ)
+    lines!(ax, x₁, x₂, color = :blue)
+end
+
+function show_contour!(ax, ctr::circle)
+    θ = range(0, 2π; length=100)
+    x₁ = ctr.center[1] .+ ctr.radius*cos.(θ)
+    x₂ = ctr.center[2] .+ ctr.radius*sin.(θ)
+    lines!(ax, x₁, x₂, color = :blue)
+end
+
+"""
+    show_quadpts!(ax, pts::quadpts)
+
+Plot the quadrature points `pts`
+"""
+function show_quadpts!(ax, pts::quadpts)
+    scatter!(ax, pts.nodes[:,1], pts.nodes[:,2])
+end
+
+"""
+    show_eigenvalues(ax, eigvals::AbstractArray)
+
+Plot the eigenvalues on complex plane
+"""
+function show_eigenvalues!(ax, eigvals::AbstractArray)
+    scatter!(ax, real(eigvals), imag(eigvals), marker = :cross, color = :red)
 end
