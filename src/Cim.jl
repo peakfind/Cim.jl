@@ -9,5 +9,6 @@ export show_contour!, show_quadpts!, show_eigenvalues!
 
 include("contour.jl")
 include("contour_int.jl")
+include("utils.jl")
 
 end
