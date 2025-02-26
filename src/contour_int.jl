@@ -11,7 +11,10 @@ NEP: the matrix function of the nonlinear eigenvalue problem
 D: the size of the NEP
 l: a number between k(the number of eigenvalues inside the contour) and D, k <= L <= D
 """
-function contr_int(pts::quadpts, NEP::Function, D, l::Int64)
+function contr_int(ctr::AbstractContour, NEP::Function, D, l::Int64; n=50, tol=1e-12)
+    # Get the quadrature points
+    pts = get_quadpts(ctr, n)
+
     # Preallocate arrays
     A0 = zeros(ComplexF64, D, l)
     A1 = zeros(ComplexF64, D, l)
@@ -32,7 +35,6 @@ function contr_int(pts::quadpts, NEP::Function, D, l::Int64)
     (V, Sigma, W) = svd(A0)
 
     # Determine the number of nonzero singular values 
-    tol = 1.0e-12
     k = count(Sigma ./ Sigma[1] .> tol)
 
     # Compute the matrix B 
@@ -45,6 +47,9 @@ function contr_int(pts::quadpts, NEP::Function, D, l::Int64)
 
     # Compute the eigenvalues of B 
     lambda = eigvals(B)
+
+    # Avoid spurious eigenvalues
+    filter!(λ -> is_inside(λ, ctr), lambda)
 
     return lambda
 end
