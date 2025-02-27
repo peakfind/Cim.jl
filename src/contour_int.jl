@@ -1,17 +1,26 @@
-#=-------------------------------------------------------------------------------------
-- 
-- references:
-- 1. Wolf-Jurgen Beyn, An integral method for solving NEPs, Linear Algebra Appl., 2012.
-- 2. Stefan Guttel, Francoise Tisseur, The NEP, Acta Numerica, 2017.
--
--------------------------------------------------------------------------------------=#
-
 """
-NEP: the matrix function of the nonlinear eigenvalue problem
-D: the size of the NEP
-l: a number between k(the number of eigenvalues inside the contour) and D, k <= L <= D
+    contr_int(ctr, NEP, D, l; n=50, tol=1e-12)
+
+Contour integral method to calculate the eigenvalues inside the contour `ctr`
+
+# Arugments
+
+- `ctr`: the contour
+- `nep`: the nonlinear eigenvalue problem
+- `D`:
+- `l`:
+- `n`: the number of the quadrature points (here we use the trapezoid rule)
+- `tol`: tolerance to determine the number of nonzero singular values
+
+# Reference
+
+- Wolf-Jurgen Beyn, An integral method for solving NEPs, Linear Algebra Appl., 2012.
 """
 function contr_int(ctr::AbstractContour, NEP::Function, D, l::Int64; n=50, tol=1e-12)
+    # Input validation
+    D > 0 || throw(ArgumentError("D must be positive"))
+    l > 0 || throw(ArgumentError("l must be positive"))
+
     # Get the quadrature points
     pts = get_quadpts(ctr, n)
 
@@ -34,6 +43,12 @@ function contr_int(ctr::AbstractContour, NEP::Function, D, l::Int64; n=50, tol=1
     # Compute the SVD of A0
     (V, Sigma, W) = svd(A0)
 
+    # Handle rank deficiency
+    if isempty(Sigma)
+        @warn "No eigenvalues found!"
+        return ComplexF64[]
+    end
+
     # Determine the number of nonzero singular values 
     k = count(Sigma ./ Sigma[1] .> tol)
 
@@ -55,11 +70,23 @@ function contr_int(ctr::AbstractContour, NEP::Function, D, l::Int64; n=50, tol=1
 end
 
 """
-contour integral method with high-order moments 
-pbar: the number of the moments (for p = 0, ..., pbar)
+    contr_int_ho()
+
+Contour integral method with high-order moments 
+
+# Arguments
 
 In this function, we follow the notations in Stefan Guttel, Francoise Tisseur, Acta Numerica, 2017
-r,l : size of the probing matrices
+
+- `ctr`:
+- `nep`:
+- `D`:
+- `r, l`: size of the probing matrices
+- `pbar`: the number of the moments (for p = 0, ..., pbar)
+
+# Reference
+
+- Stefan Guttel, Francoise Tisseur, The NEP, Acta Numerica, 2017.
 """
 function contr_int_ho(pts::quadpts, NEP::Function, D::Int64, l::Int64, r::Int64, pbar::Int64)
     # Preallocate arrays
