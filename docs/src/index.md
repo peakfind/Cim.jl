@@ -13,10 +13,3 @@ the REPL to enter `pkg>` mode. Then enter
 ```julia
 pkg> add https://github.com/peakfind/Cim.jl.git
 ```
-
-```@index
-```
-
-```@autodocs
-Modules = [Cim]
-```
