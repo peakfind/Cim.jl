@@ -14,6 +14,7 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "Contours and Quadrature Rules" => "contour.md",
         "API" => "api.md",
     ],
 )
