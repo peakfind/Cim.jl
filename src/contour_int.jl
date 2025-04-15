@@ -1,5 +1,5 @@
 """
-    contr_int(ctr, NEP, D, l; n=50, tol=1e-12)
+    cim(ctr::AbstractContour, nep::Function, D, l::Int64; n=50, tol=1e-12)
 
 Contour integral method to calculate the eigenvalues inside the contour `ctr`
 
@@ -7,8 +7,8 @@ Contour integral method to calculate the eigenvalues inside the contour `ctr`
 
 - `ctr`: the contour
 - `nep`: the nonlinear eigenvalue problem
-- `D`:
-- `l`:
+- `D`: the scale of the `nep`
+- `l`: the number of columns of random matrix
 - `n`: the number of the quadrature points (here we use the trapezoid rule)
 - `tol`: tolerance to determine the number of nonzero singular values
 
@@ -16,24 +16,24 @@ Contour integral method to calculate the eigenvalues inside the contour `ctr`
 
 - Wolf-Jurgen Beyn, An integral method for solving NEPs, Linear Algebra Appl., 2012.
 """
-function contr_int(ctr::AbstractContour, NEP::Function, D, l::Int64; n=50, tol=1e-12)
+function cim(ctr::AbstractContour, nep::Function, d, l::Int64; n=50, tol=1e-12)
     # Input validation
-    D > 0 || throw(ArgumentError("D must be positive"))
+    d > 0 || throw(ArgumentError("d must be positive"))
     l > 0 || throw(ArgumentError("l must be positive"))
 
     # Get the quadrature points
     pts = get_quadpts(ctr, n)
 
     # Preallocate arrays
-    A0 = zeros(ComplexF64, D, l)
-    A1 = zeros(ComplexF64, D, l)
-    Vhat = randn(ComplexF64, D, l)
+    A0 = zeros(ComplexF64, d, l)
+    A1 = zeros(ComplexF64, d, l)
+    Vhat = randn(ComplexF64, d, l)
 
     # Compute A0 and A1 with trapezoid rule
     for j in 1:pts.N
         z = complex(pts.nodes[j, 1], pts.nodes[j, 2])
         z_prime = complex(pts.nodes_prime[j, 1], pts.nodes_prime[j, 2])
-        invNEP_Vhat = NEP(z) \ Vhat
+        invNEP_Vhat = nep(z) \ Vhat
         A0 .+= invNEP_Vhat * z_prime
         A1 .+= invNEP_Vhat * z * z_prime
     end

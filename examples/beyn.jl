@@ -2,8 +2,8 @@ using Cim, CairoMakie
 
 function nep(z::ComplexF64)
     D = 400
-	A = zeros(ComplexF64, D, D)
-	diag = 2.0*D - 4.0*z/(6.0*D) # diagonal entry
+    A = zeros(ComplexF64, D, D)
+    diag = 2.0*D - 4.0*z/(6.0*D) # diagonal entry
     odiag = -1.0*D - z/(6.0*D) # off-diagonal entry
 
     # top row
@@ -24,7 +24,8 @@ function nep(z::ComplexF64)
 end
 
 # Parameters
-N = 50 # the number of the quadrature nodes
+# the number of the quadrature nodes
+N = 30
 l = 10
 
 # Define the contour
@@ -36,6 +37,6 @@ ax = Axis(fig[1, 1], aspect = 1, title = "Contour")
 show_contour!(ax, elp)
 
 # Compute the eigenvalues and plot them on complex plane
-λ = contr_int(elp, nep, 400, l; n=50)
+λ = cim(elp, nep, 400, l; n=N)
 show_eigenvalues!(ax, λ)
 fig
