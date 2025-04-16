@@ -24,6 +24,7 @@ makedocs(;
         "Contours and Quadrature Rules" => "contour.md",
         "Tutorials" => "eigenvibrations.md",
         "API" => "api.md",
+        "References" => "references.md",
     ],
     plugins = [bib],
 )
