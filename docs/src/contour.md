@@ -1,3 +1,7 @@
+```@meta
+CurrentModule = Cim
+```
+
 # Contours and Quadrature Rules
 
 ## Contours

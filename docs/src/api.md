@@ -1,3 +1,7 @@
+```@meta
+CurrentModule = Cim
+```
+
 # API
 
 ```@index
