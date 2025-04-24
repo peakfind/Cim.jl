@@ -2,8 +2,8 @@
 
 # ## Introduction
 
-# Consider the following eigenvalue problem with appears in many papers, for 
-# example [solovev2006](@cite), [kressner2009](@cite), and [beyn2012](@cite).
+# Consider the following eigenvalue problem which appears in many papers, for 
+# example [beyn2012](@cite), [solovev2006](@cite), and [kressner2009](@cite).
 # In this introduction, we mainly follow the formulation in [kressner2009](@cite).
 # Find ``\lambda > \kappa`` and a nonzero function ``u:[0, 1] \to \mathbb{R}`` 
 # such that 
@@ -46,6 +46,7 @@
 # For simplicity, we set ``K = M = \kappa = 1``. Then ``\varphi(\lambda)`` reduces 
 # to ``\frac{\lambda}{\lambda - 1}``. We present computed eigenvalues with ``n = 100`` 
 # and ``n = 400`` in [kressner2009](@cite).
+
 # |  ``n``  | ``\lambda_{1}`` | ``\lambda_{2}`` | ``\lambda_{3}`` | ``\lambda_{4}`` | ``\lambda_{5}`` |
 # | :-----: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
 # |   100   | 4.4821765459    | 24.223573113    | 63.723821142    | 123.03122107    | 202.20089914    |
@@ -55,10 +56,10 @@
 # ## Contour integral method
 
 # In this section, we will use the contour integral method to solve the above 
-# nonlinear eigenvalue problem. First, we load Cim.
+# nonlinear eigenvalue problem. First, we load Cim and SparseArrays.
 using Cim, SparseArrays
 
-# We use a function `nep1` and `nep2` to construct the discrete nonlinear eigenvalue 
+# We use functions `nep1` and `nep2` to construct the discrete nonlinear eigenvalue 
 # problems for ``n = 100`` and ``n = 400``.
 
 ## n = 100
