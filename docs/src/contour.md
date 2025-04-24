@@ -10,7 +10,7 @@ We plan to support three kinds of contours: ellipse, circle, and rectangle (not 
 
 ## Quadrature Rules
 
-We use the composite trapezoidal rule on ellipse and circles. We can get the quadrature 
+We use the composite trapezoidal rule on ellipses and circles. We can get the quadrature 
 points by using 
 ```@docs
 get_quadpts
