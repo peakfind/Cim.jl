@@ -70,6 +70,64 @@ function cim(ctr::AbstractContour, nep::Function, d, l::Int64; n=50, tol=1e-12)
 end
 
 """
+    cim(ctr::AbstractContour, nep::Qep, d::Int64, l::Int64; n=50, tol=1e-12)
+
+Use the contour integral method to solve quadratic eigenvalue problems.
+"""
+function cim(ctr::AbstractContour, nep::Qep, d::Int64, l::Int64; n=50, tol=1e-12)
+    # Input validation
+    d > 0 || throw(ArgumentError("d must be positive"))
+    l > 0 || throw(ArgumentError("l must be positive"))
+
+    # Get the quadrature points
+    pts = get_quadpts(ctr, n)
+
+    # Preallocate arrays
+    A0 = zeros(ComplexF64, d, l)
+    A1 = zeros(ComplexF64, d, l)
+    V̂ = randn(ComplexF64, d, l)
+
+    # Compute A0 and A1 with trapezoid rule
+    for j in 1:pts.N
+        z = complex(pts.nodes[j, 1], pts.nodes[j, 2])
+        z_prime = complex(pts.nodes_prime[j, 1], pts.nodes_prime[j, 2])
+        invNEP_Vhat = nep(z) \ V̂ 
+        A0 .+= invNEP_Vhat * z_prime
+        A1 .+= invNEP_Vhat * z * z_prime
+    end
+    A0 ./= (pts.N * im)
+    A1 ./= (pts.N * im)
+
+    # Compute the SVD of A0
+    (V, Σ, W) = svd(A0)
+
+    # Handle rank deficiency
+    if isempty(Σ)
+        @warn "No eigenvalues found!"
+        return ComplexF64[]
+    end
+
+    # Determine the number of nonzero singular values 
+    k = count(Σ / Σ[1] .> tol)
+
+    # Compute the matrix B 
+    Vk = V[:,1:k]
+    Σₖ = Σ[1:k]
+    Wk = W[:,1:k]
+
+    # Diagonal is more efficient
+    B = (Vk' * A1 * Wk) * Diagonal(1 ./ Σₖ)
+
+    # Compute the eigenvalues of B 
+    lambda = eigvals(B)
+
+    # Avoid spurious eigenvalues
+    filter!(λ -> is_inside(λ, ctr), lambda)
+
+    return lambda
+end
+
+"""
     contr_int_ho()
 
 Contour integral method with high-order moments 
