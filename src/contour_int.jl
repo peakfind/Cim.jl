@@ -74,7 +74,7 @@ end
 
 Use the contour integral method to solve quadratic eigenvalue problems.
 """
-function cim(ctr::AbstractContour, nep::Qep, d::Int64, l::Int64; n=50, tol=1e-12)
+function cim(ctr::AbstractContour, nep::Qep{T}, d::Int64, l::Int64; n=50, tol=1e-12) where T
     # Input validation
     d > 0 || throw(ArgumentError("d must be positive"))
     l > 0 || throw(ArgumentError("l must be positive"))

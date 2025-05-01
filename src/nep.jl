@@ -29,9 +29,14 @@ function Qep{T}(;
     A₀::SparseMatrixCSC{T, Int}, 
     A₁::SparseMatrixCSC{T, Int}, 
     A₂::SparseMatrixCSC{T, Int}) where T
-    Qep{T}(A₀, A₁, A₂)
+    return Qep{T}(A₀, A₁, A₂)
 end
 
+"""
+    (q::Qep{T})(α::S) where {T, S}
+
+Compute the matrix of the quadratic eigenvalue problem at specific value `α`.
+"""
 function (q::Qep{T})(α::S) where {T, S}
-    return q.A₀ + α * q.A₁ + (α^2) * A₂
+    return q.A₀ + α * q.A₁ + (α^2) * q.A₂
 end
