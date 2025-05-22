@@ -1,4 +1,3 @@
-
 """
 contours that we plan to support:
      1. ellipse
@@ -43,53 +42,40 @@ end
 
 """
     get_quadpts(ctr::ellipse, num_quadpts::Int64)
+    get_quadpts(ctr::circle, num_quadpts::Int64)
     
 Get the quadrature points on the ellipse `ctr`. Here we use trapezoidal rule.
 
 # Arguments
 
-- `ctr``: the contour that we discretize 
+- `ctr`: the contour (circle or ellipse) that we discretize
 - `num_quadpts`: the number of the quadrature nodes
-
-TODO: note that rectangle is different with ellipse and circle
 """
 function get_quadpts(ctr::ellipse, num_quadpts::Int64)
     nodes = zeros(num_quadpts, 2)
     nodes_prime = zeros(num_quadpts, 2)
-    delta = 2*pi / num_quadpts
+    δ = 2π / (num_quadpts - 1)
 
-    for i = 0:num_quadpts-1
-        nodes[i + 1, 1] = ctr.center[1] + ctr.semi_x * cos(delta * i)
-        nodes[i + 1, 2] = ctr.center[2] + ctr.semi_y * sin(delta * i)
-        nodes_prime[i + 1, 1] = -ctr.semi_x * sin(delta * i)
-        nodes_prime[i + 1, 2] = ctr.semi_y * cos(delta * i)
+    for i = 0:num_quadpts - 1
+        nodes[i + 1, 1] = ctr.center[1] + ctr.semi_x * cos(δ * i)
+        nodes[i + 1, 2] = ctr.center[2] + ctr.semi_y * sin(δ * i)
+        nodes_prime[i + 1, 1] = -ctr.semi_x * sin(δ * i)
+        nodes_prime[i + 1, 2] = ctr.semi_y * cos(δ * i)
     end
 
     return quadpts(num_quadpts, nodes, nodes_prime)
 end
 
-"""
-    get_quadpts(ctr::circle, num_quadpts::Int64)
-
-Get the quadrature points on the circle `ctr`. Here we use trapezoidal rule.
-
-# Arguments
-
-- `ctr`: the contour that we discretize 
-- `num_quadpts`: the number of the quadrature nodes
-
-TODO: note that rectangle is different with ellipse and circle
-"""
 function get_quadpts(ctr::circle, num_quadpts::Int64)
     nodes = zeros(num_quadpts, 2)
     nodes_prime = zeros(num_quadpts, 2)
-    delta = 2*pi / num_quadpts
+    δ = 2π / (num_quadpts - 1)
 
-    for i = 0:num_quadpts-1
-        nodes[i + 1, 1] = ctr.center[1] + ctr.radius * cos(delta * i) 
-        nodes[i + 1, 2] = ctr.center[1] + ctr.radius * sin(delta * i)
-        nodes_prime[i + 1, 1] = -ctr.radius * sin(delta * i)
-        nodes_prime[i + 1, 2] = ctr.radius * cos(delta * i)
+    for i = 0:num_quadpts - 1
+        nodes[i + 1, 1] = ctr.center[1] + ctr.radius * cos(δ * i) 
+        nodes[i + 1, 2] = ctr.center[2] + ctr.radius * sin(δ * i)
+        nodes_prime[i + 1, 1] = -ctr.radius * sin(δ * i)
+        nodes_prime[i + 1, 2] = ctr.radius * cos(δ * i)
     end
 
     return quadpts(num_quadpts, nodes, nodes_prime)

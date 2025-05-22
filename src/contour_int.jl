@@ -7,7 +7,7 @@ Contour integral method to calculate the eigenvalues inside the contour `ctr`
 
 - `ctr`: the contour
 - `nep`: the nonlinear eigenvalue problem
-- `D`: the scale of the `nep`
+- `d`: the scale of the `nep`
 - `l`: the number of columns of random matrix
 - `n`: the number of the quadrature points (here we use the trapezoid rule)
 - `tol`: tolerance to determine the number of nonzero singular values
@@ -30,43 +30,43 @@ function cim(ctr::AbstractContour, nep::Function, d, l::Int64; n=50, tol=1e-12)
     Vhat = randn(ComplexF64, d, l)
 
     # Compute A0 and A1 with trapezoid rule
-    for j in 1:pts.N
+    for j in 1:pts.N - 1
         z = complex(pts.nodes[j, 1], pts.nodes[j, 2])
         z_prime = complex(pts.nodes_prime[j, 1], pts.nodes_prime[j, 2])
         invNEP_Vhat = nep(z) \ Vhat
         A0 .+= invNEP_Vhat * z_prime
         A1 .+= invNEP_Vhat * z * z_prime
     end
-    A0 ./= (pts.N*im)
-    A1 ./= (pts.N*im)
+    A0 ./= (im * (pts.N - 1))
+    A1 ./= (im * (pts.N - 1))
 
     # Compute the SVD of A0
-    (V, Sigma, W) = svd(A0)
+    (V, Σ, W) = svd(A0)
 
     # Handle rank deficiency
-    if isempty(Sigma)
+    if isempty(Σ)
         @warn "No eigenvalues found!"
         return ComplexF64[]
     end
 
     # Determine the number of nonzero singular values 
-    k = count(Sigma ./ Sigma[1] .> tol)
+    k = count(Σ ./ Σ[1] .> tol)
 
     # Compute the matrix B 
     Vk = V[:,1:k]
-    Sigk = Sigma[1:k]
+    Σk = Σ[1:k]
     Wk = W[:,1:k]
 
     # Diagonal is more efficient
-    B = (Vk' * A1 * Wk) * Diagonal(1 ./ Sigk)
+    B = (Vk' * A1 * Wk) * Diagonal(1 ./ Σk)
 
     # Compute the eigenvalues of B 
-    lambda = eigvals(B)
+    λ = eigvals(B)
 
     # Avoid spurious eigenvalues
-    filter!(λ -> is_inside(λ, ctr), lambda)
+    filter!(z -> is_inside(z, ctr), λ)
 
-    return lambda
+    return λ 
 end
 
 """
@@ -85,18 +85,18 @@ function cim(ctr::AbstractContour, nep::Qep{T}, d::Int64, l::Int64; n=50, tol=1e
     # Preallocate arrays
     A0 = zeros(ComplexF64, d, l)
     A1 = zeros(ComplexF64, d, l)
-    V̂ = randn(ComplexF64, d, l)
+    Vhat = randn(ComplexF64, d, l)
 
     # Compute A0 and A1 with trapezoid rule
-    for j in 1:pts.N
+    for j in 1:pts.N - 1
         z = complex(pts.nodes[j, 1], pts.nodes[j, 2])
         z_prime = complex(pts.nodes_prime[j, 1], pts.nodes_prime[j, 2])
-        invNEP_Vhat = nep(z) \ V̂ 
+        invNEP_Vhat = nep(z) \ Vhat
         A0 .+= invNEP_Vhat * z_prime
         A1 .+= invNEP_Vhat * z * z_prime
     end
-    A0 ./= (pts.N * im)
-    A1 ./= (pts.N * im)
+    A0 ./= (im * (pts.N - 1))
+    A1 ./= (im * (pts.N - 1))
 
     # Compute the SVD of A0
     (V, Σ, W) = svd(A0)
@@ -108,23 +108,23 @@ function cim(ctr::AbstractContour, nep::Qep{T}, d::Int64, l::Int64; n=50, tol=1e
     end
 
     # Determine the number of nonzero singular values 
-    k = count(Σ / Σ[1] .> tol)
+    k = count(Σ ./ Σ[1] .> tol)
 
     # Compute the matrix B 
     Vk = V[:,1:k]
-    Σₖ = Σ[1:k]
+    Σk = Σ[1:k]
     Wk = W[:,1:k]
 
     # Diagonal is more efficient
-    B = (Vk' * A1 * Wk) * Diagonal(1 ./ Σₖ)
+    B = (Vk' * A1 * Wk) * Diagonal(1 ./ Σk)
 
     # Compute the eigenvalues of B 
-    lambda = eigvals(B)
+    λ = eigvals(B)
 
     # Avoid spurious eigenvalues
-    filter!(λ -> is_inside(λ, ctr), lambda)
+    filter!(z -> is_inside(z, ctr), λ)
 
-    return lambda
+    return λ
 end
 
 """
