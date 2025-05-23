@@ -42,8 +42,9 @@ end
 
 """
     get_quadpts(ctr::ellipse, num_quadpts::Int64) 
+    get_quadpts(ctr::circle, num_quadpts::Int64)
     
-Get the quadrature points on the ellipse `ctr`. Here we use the composite trapezoidal rule.
+Get the quadrature points on the contour (ellipse or circle) `ctr`. Here we use the composite trapezoidal rule.
 
 # Arguments
 
@@ -64,17 +65,7 @@ function get_quadpts(ctr::ellipse, num_quadpts::Int64)
 
     return quadpts(num_quadpts, nodes, nodes_prime)
 end
-
-"""
-    get_quadpts(ctr::circle, num_quadpts::Int64)
-
-Get the quadrature points on the circle `ctr`. Here we use the composite trapezoidal rule.
-
-# Arguments
-
-- `ctr`: the contour that we discretize
-- `num_quadpts`: the number of the quadrature nodes
-"""
+    
 function get_quadpts(ctr::circle, num_quadpts::Int64)
     nodes = zeros(num_quadpts, 2)
     nodes_prime = zeros(num_quadpts, 2)

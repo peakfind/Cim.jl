@@ -13,8 +13,7 @@ We plan to support three kinds of contours: ellipse, circle, and rectangle (not 
 We use the composite trapezoidal rule on ellipses and circles. We can get the quadrature 
 points by using 
 ```@docs
-get_quadpts(ctr::ellipse, num_quadpts::Int64)
-get_quadpts(ctr::circle, num_quadpts::Int64)
+get_quadpts
 ```
 For example, 
 ```julia
