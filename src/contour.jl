@@ -42,8 +42,8 @@ end
 
 """
     get_quadpts(ctr::ellipse, num_quadpts::Int64) 
-    get_quadpts(ctr::circle, num_quadpts::Int64)
-    
+    get_quadpts(ctr::circle, num_quadpts::Int64) 
+
 Get the quadrature points on the contour (ellipse or circle) `ctr`. Here we use the composite trapezoidal rule.
 
 # Arguments
