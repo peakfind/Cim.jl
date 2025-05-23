@@ -50,8 +50,7 @@ function cim(ctr::AbstractContour, nep::Function, d, l::Int64; n=50, tol=1e-12)
     end
     
     # Print the singular values Σ which can help you to decide tol
-    println("The singular values of A0: ")
-    display(Σ)
+    print_vec(Σ)
 
     # Determine the number of nonzero singular values 
     k = count(Σ ./ Σ[1] .> tol)
@@ -110,6 +109,9 @@ function cim(ctr::AbstractContour, nep::Qep{T}, d::Int64, l::Int64; n=50, tol=1e
         @warn "No eigenvalues found!"
         return ComplexF64[]
     end
+
+    # Print the singular values Σ which can help you to decide tol
+    print_vec(Σ)
 
     # Determine the number of nonzero singular values 
     k = count(Σ ./ Σ[1] .> tol)

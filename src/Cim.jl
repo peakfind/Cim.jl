@@ -3,6 +3,7 @@ module Cim
 using LinearAlgebra
 using SparseArrays
 using CairoMakie
+using Printf
 
 include("nep.jl")
 export Qep

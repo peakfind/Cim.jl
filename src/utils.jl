@@ -32,3 +32,22 @@ function is_inside(λ, ctr::circle)
         return false
     end
 end
+
+"""
+    print_vec(vec; precision::Int=6)
+
+Print the vector `vec` to the REPL.
+"""
+function print_vec(vec::AbstractVector; precision::Int=6)
+    println("\nSingular values of A0:")
+    
+    # Construct the format we need
+    fmt = Printf.Format("%.$(precision)e\n")
+
+    # Print the elements in vec
+    for v in vec 
+        Printf.format(stdout, fmt, v)
+    end
+    
+    return nothing
+end
