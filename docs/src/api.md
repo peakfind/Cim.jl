@@ -14,7 +14,8 @@ AbstractContour
 
 ```@docs
 quadpts
-get_quadpts
+get_quadpts(ctr::ellipse, num_quadpts::Int64)
+get_quadpts(ctr::circle, num_quadpts::Int64)
 ```
 
 ## Nonlinear eigenvalue problems
