@@ -10,7 +10,7 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
-CairoMakie = "0.13.1"
+CairoMakie = "0.13.1, 0.15"
 LinearAlgebra = "1.11.0"
 Printf = "1.11.0"
 SparseArrays = "1.11.0"
