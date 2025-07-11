@@ -1,5 +1,5 @@
 """
-    cim(ctr::AbstractContour, nep::Function, D, l::Int64; n=50, tol=1e-12)
+    cim(ctr::AbstractContour, nep::Function, d, l::Int64; n=50, tol=1e-12)
 
 Contour integral method to calculate the eigenvalues inside the contour `ctr`
 
@@ -134,17 +134,15 @@ function cim(ctr::AbstractContour, nep::Qep{T}, d::Int64, l::Int64; n=50, tol=1e
 end
 
 """
-    contr_int_ho()
+    hcim(pts::quadpts, NEP::Function, d::Int64, l::Int64, r::Int64, pbar::Int64)
 
 Contour integral method with high-order moments 
 
 # Arguments
 
-In this function, we follow the notations in Stefan Guttel, Francoise Tisseur, Acta Numerica, 2017
-
-- `ctr`:
-- `nep`:
-- `D`:
+- `ctr`: the contour
+- `nep`: the nonlinear eigenvalue problem
+- `d`: the scale of the nonlinear eigenvalue problem `nep`
 - `r, l`: size of the probing matrices
 - `pbar`: the number of the moments (for p = 0, ..., pbar)
 
@@ -152,11 +150,13 @@ In this function, we follow the notations in Stefan Guttel, Francoise Tisseur, A
 
 - Stefan Guttel, Francoise Tisseur, The NEP, Acta Numerica, 2017.
 """
-function contr_int_ho(pts::quadpts, NEP::Function, D::Int64, l::Int64, r::Int64, pbar::Int64)
+function hcim(pts::quadpts, NEP::Function, d::Int64, l::Int64, r::Int64, pbar::Int64)
     # Preallocate arrays
-    L = randn(ComplexF64, D, l)
-    R = randn(ComplexF64, D, r)
-    A = zeros(ComplexF64, 2*pbar*l, r)# contains all the moments p = 0, ..., 2*pbar - 1
+    L = randn(ComplexF64, d, l)
+    R = randn(ComplexF64, d, r)
+
+    # contains all the moments p = 0, ..., 2*pbar - 1
+    A = zeros(ComplexF64, 2*pbar*l, r)
 
     # Compute moments (We need use NEP\R not the inv())
     for j in 1:pts.N
@@ -180,16 +180,16 @@ function contr_int_ho(pts::quadpts, NEP::Function, D::Int64, l::Int64, r::Int64,
     end
 
     # Compute the SVD of B0
-    (V, Sigma, W) = svd(B0)
+    (V, Σ, W) = svd(B0)
 
     # Determine the number of nonzero singular values
     # mbar: the number of the eigs inside the contour
     tol = 1.0e-12
-    mbar = count(Sigma ./ Sigma[1] .> tol)
+    mbar = count(Σ ./ Σ[1] .> tol)
 
     # Compute the matrix M
     Vmbar = V[:,1:mbar]
-    Sigmbar = Sigma[1:mbar]
+    Sigmbar = Σ[1:mbar]
     Wmbar = W[:,1:mbar]
     M = (Vmbar' * B1 * Wmbar) * Diagonal(1 ./ Sigmbar)
 
