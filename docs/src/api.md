@@ -27,7 +27,7 @@ Qep
 
 ```@docs
 cim
-contr_int_ho
+hcim
 ```
 
 ## Visualization
