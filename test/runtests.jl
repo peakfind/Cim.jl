@@ -15,8 +15,12 @@ using Test
         end 
         
         elp = Cim.ellipse([150.0, 0.0], 148.0, 148.0)
-        λ = cim(elp, nep100, 100, 10; n=30)
+        λ1 = cim(elp, nep100, 100, 10; n=30)
+        cir = Cim.circle([150.0, 0.0], 148.0)
+        λ2 = cim(cir, nep100, 100, 10; n=30)
+
         rst = [4.4821765459, 24.223573113, 63.723821142, 123.03122107, 202.20089914]
-        @test real(λ) ≈ rst atol=1e-6
+        @test real(λ1) ≈ rst atol=1e-6
+        @test real(λ2) ≈ rst atol=1e-6
     end
 end
