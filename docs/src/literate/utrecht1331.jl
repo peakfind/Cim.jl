@@ -34,7 +34,7 @@
 # grid on;
 # ```
 # 
-# ![distribution](utrecht1331_1.png)
+# ![distribution](literate/utrecht1331_1.png)
 # 
 # This figure showw the distribution of the eigenvalues of utrecht1331.
 
@@ -82,7 +82,7 @@
 
 # We want to get the two eigenvalues inside the blue circle in the below figure
 
-# ![eigenvals](utrecht1331_2.png)
+# ![eigenvals](literate/utrecht1331_2.png)
 
 # Solve the eigenvalue problem
 # ```julia
