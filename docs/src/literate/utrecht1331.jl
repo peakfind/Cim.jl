@@ -45,32 +45,46 @@
 # problem.
 
 # First, we need to load our package.
-using Cim
+# ```julia
+# using Cim
+# ```julia
 
 # We also need [MAT.jl](https://github.com/JuliaIO/MAT.jl) to read the coefficients of 
 # the utrecht1331. 
-using MAT
+# ```julia
+# using MAT
+# ```
 
 # Read the three matrices by using MAT.jl. You can download utrecht1331.mat from 
 # [Github repository](https://github.com/ftisseur/nlevp).
-coeffs = matread("utrecht1331.mat")
+# ```julia
+# coeffs = matread("utrecht1331.mat")
+# ```
 
 # Extract these three matrices and convert the real matrices to complex.
-M, D, K = coeffs["M"], coeffs["D"], coeffs["K"] 
-M = complex.(M)
-K = complex.(K)
-## Get the size of the matrices
-d = size(D, 1)
+# ```julia
+# M, D, K = coeffs["M"], coeffs["D"], coeffs["K"] 
+# M = complex.(M)
+# K = complex.(K)
+# # Get the size of the matrices
+# d = size(D, 1)
+# ```
 
 # Construct the quadratic eigenvalues problem by [`Qep`](@ref).
-Q = Qep{ComplexF64}(A₀ = K, A₁ = D, A₂ = M)
+# ```julia
+# Q = Qep{ComplexF64}(A₀ = K, A₁ = D, A₂ = M)
+# ```
 
 # Construct the contour.
-elp = Cim.ellipse([-1.0, -281.0], 1.0, 4.0)
+# ```julia
+# elp = Cim.ellipse([-1.0, -281.0], 1.0, 4.0)
+# ```
 
 # We want to get the two eigenvalues inside the blue circle in the below figure
 
 # ![eigenvals](utrecht1331_2.png)
 
 # Solve the eigenvalue problem
-λ = cim(elp, Q, d, 5)
+# ```julia
+# λ = cim(elp, Q, d, 5)
+# ```
