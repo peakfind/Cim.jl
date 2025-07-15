@@ -4,7 +4,7 @@ using Literate
 
 DocMeta.setdocmeta!(Cim, :DocTestSetup, :(using Cim); recursive=true)
 
-bib = CitationBibliography(joinpath(@__DIR__, "src", "refs.bib"))
+bib = CitationBibliography(joinpath(@__DIR__, "src", "refs.bib");style=:numeric)
 
 # Generate examples by Literate.jl
 function generate_examples(source_dir, output_dir; exclude=[])
