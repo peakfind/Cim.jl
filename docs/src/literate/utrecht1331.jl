@@ -1,12 +1,12 @@
 # # Utrecht1331 
-#
+
 # utrecht1331 is a new quadratic eigenvalue problem in NLEVP version 4.0 [nlevp](@cite).
 # You can find the NLEVP MATLAB toolbox and the documentations in its [Github repository](https://github.com/ftisseur/nlevp).
-#
+
 # ## Matlab code for utrecht1331
-#
-# Install the toolbox and [`quadratic-eigensolver`](https://github.com/ftisseur/quadratic-eigensolver) 
-# which contains the MATLAB function `quadeig`. Then we can solve the utrecht1331 by the code below.
+
+# Install the NLEVP toolbox and [`quadratic-eigensolver`](https://github.com/ftisseur/quadratic-eigensolver) 
+# which contains the MATLAB function `quadeig`. Then we can solve the utrecht1331 in Matlab by the following code.
 # ```Matlab
 # % Utrecht1331 in NLEVP
 # 
@@ -45,46 +45,50 @@
 # problem.
 
 # First, we need to load our package.
-# ```julia
-# using Cim
-# ```
+using Cim
 
-# We also need [MAT.jl](https://github.com/JuliaIO/MAT.jl) to read the coefficients of 
-# the utrecht1331. 
-# ```julia
-# using MAT
-# ```
+# We also need [MAT.jl](https://github.com/JuliaIO/MAT.jl) to read the coefficients of the utrecht1331. 
+using MAT
 
-# Read the three matrices by using MAT.jl. You can download utrecht1331.mat from 
+# Read the three matrices by using `matread` in MAT. You can download `utrecht1331.mat` from 
 # [Github repository](https://github.com/ftisseur/nlevp).
-# ```julia
-# coeffs = matread("utrecht1331.mat")
-# ```
+coeffs = matread("literate/utrecht1331.mat")
 
 # Extract these three matrices and convert the real matrices to complex.
-# ```julia
-# M, D, K = coeffs["M"], coeffs["D"], coeffs["K"] 
-# M = complex.(M)
-# K = complex.(K)
-# # Get the size of the matrices
-# d = size(D, 1)
-# ```
+M, D, K = coeffs["M"], coeffs["D"], coeffs["K"] 
+M = complex.(M)
+K = complex.(K)
+
+# Get the size of the matrices
+d = size(D, 1)
 
 # Construct the quadratic eigenvalues problem by [`Qep`](@ref).
-# ```julia
-# Q = Qep{ComplexF64}(A₀ = K, A₁ = D, A₂ = M)
-# ```
+Q = Qep{ComplexF64}(A₀ = K, A₁ = D, A₂ = M)
 
 # Construct the contour.
-# ```julia
-# elp = Cim.ellipse([-1.0, -281.0], 1.0, 4.0)
-# ```
+elp = Cim.ellipse([-1.0, -281.0], 1.0, 4.0)
 
 # We want to get the two eigenvalues inside the blue circle in the below figure
 
 # ![eigenvals](literate/utrecht1331_2.png)
 
 # Solve the eigenvalue problem
+λ = cim(elp, Q, d, 5)
+
+## Plain code
+
 # ```julia
+# using Cim
+# using MAT
+# 
+# # Be careful of the path of utrecht1331.mat 
+# coeffs = matread("utrecht1331.mat")
+# M, D, K = coeffs["M"], coeffs["D"], coeffs["K"] 
+# M = complex.(M)
+# K = complex.(K)
+# d = size(D, 1)
+# 
+# Q = Qep{ComplexF64}(A₀ = K, A₁ = D, A₂ = M)
+# elp = Cim.ellipse([-1.0, -281.0], 1.0, 4.0)
 # λ = cim(elp, Q, d, 5)
 # ```
