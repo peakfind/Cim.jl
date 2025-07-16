@@ -36,7 +36,7 @@
 # 
 # ![distribution](literate/utrecht1331_1.png)
 # 
-# This figure showw the distribution of the eigenvalues of utrecht1331.
+# This figure shows the distribution of the eigenvalues of utrecht1331.
 
 # ## Contour integral method
 
@@ -47,7 +47,7 @@
 # First, we need to load our package.
 # ```julia
 # using Cim
-# ```julia
+# ```
 
 # We also need [MAT.jl](https://github.com/JuliaIO/MAT.jl) to read the coefficients of 
 # the utrecht1331. 
