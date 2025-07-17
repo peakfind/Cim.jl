@@ -30,14 +30,6 @@ cim
 hcim
 ```
 
-## Visualization
-
-```@docs
-show_contour!
-show_eigenvalues!
-show_quadpts!
-```
-
 ## Utils
 
 ```@docs

@@ -1,4 +1,7 @@
-using Cim, CairoMakie
+using Cim
+
+# Load CairoMakie to use CimMakieExt
+using CairoMakie
 
 function nep(z::ComplexF64)
     D = 400
