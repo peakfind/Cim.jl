@@ -75,7 +75,7 @@ elp = Cim.ellipse([-1.0, -281.0], 1.0, 4.0)
 # Solve the eigenvalue problem
 λ = cim(elp, Q, d, 5)
 
-## Plain code
+# ## Plain code
 
 # ```julia
 # using Cim
