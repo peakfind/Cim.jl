@@ -15,7 +15,7 @@ CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 CimMakieExt = "CairoMakie"
 
 [compat]
-CairoMakie = "0.13.1"
+CairoMakie = "0.13.1, 0.15"
 LinearAlgebra = "1.11.0"
 Printf = "1.11.0"
 SparseArrays = "1.11.0"
